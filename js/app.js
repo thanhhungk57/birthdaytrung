@@ -5,6 +5,20 @@ window.addEventListener("load", () => {
       intro.classList.add("hidden");
     }, 1700);
   }
+  
+  // Dynamic Island Effect
+  setTimeout(() => {
+    const island = document.getElementById("dynamic-island");
+    if (island) {
+      island.classList.add("active");
+      if(navigator.vibrate) navigator.vibrate([15, 30, 15]);
+      
+      setTimeout(() => {
+        island.classList.remove("active");
+        setTimeout(() => { island.style.display = "none"; }, 650);
+      }, 3500);
+    }
+  }, 2200);
 });
 
 const cursor = document.querySelector(".cursor");
@@ -27,8 +41,34 @@ if (cursor) {
 
 const enter = document.getElementById("enter");
 if (enter) {
-  enter.onclick = () =>
+  enter.onclick = () => {
+    if(navigator.vibrate) navigator.vibrate(20);
     document.querySelector(".cinema").scrollIntoView({ behavior: "smooth" });
+    
+    // Request Gyroscope on iOS 13+
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response == 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          }
+        })
+        .catch(console.error);
+    } else {
+      window.addEventListener('deviceorientation', handleOrientation);
+    }
+  };
+}
+
+function handleOrientation(e) {
+  let x = e.gamma; // [-90,90]
+  let y = e.beta;  // [-180,180]
+  if(x > 90) x = 90; if(x < -90) x = -90;
+  if(y > 90) y = 90; if(y < -90) y = -90;
+  
+  // Apply CSS Variables for Parallax
+  document.documentElement.style.setProperty('--tilt-x', `${x / 3.5}px`);
+  document.documentElement.style.setProperty('--tilt-y', `${y / 3.5}px`);
 }
 
 const io = new IntersectionObserver(
@@ -37,12 +77,12 @@ const io = new IntersectionObserver(
       if (e.isIntersecting) {
         e.target.animate(
           [
-            { opacity: 0, transform: "translateY(35px)" },
-            { opacity: 1, transform: "translateY(0)" },
+            { opacity: 0, transform: "translateY(40px) scale(0.97)", filter: "blur(12px)" },
+            { opacity: 1, transform: "translateY(0) scale(1)", filter: "blur(0px)" },
           ],
           {
-            duration: 1100,
-            easing: "cubic-bezier(.16,1,.3,1)",
+            duration: 1300,
+            easing: "cubic-bezier(0.16, 1, 0.3, 1)",
             fill: "forwards",
           }
         );
@@ -136,6 +176,7 @@ if (star && fx) {
   const close = document.getElementById("close");
   if (surprise && modal) {
     surprise.onclick = () => {
+      if(navigator.vibrate) navigator.vibrate([20, 40, 20]);
       modal.classList.add("open");
       burst();
     };

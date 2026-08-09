@@ -23,6 +23,62 @@ body {
   font-weight: 300;
   overflow-x: hidden;
 }
+/* Dynamic Island */
+#dynamic-island {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 125px;
+  height: 35px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.65s cubic-bezier(0.8, 0, 0.2, 1);
+  box-shadow: 0 0 25px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.06);
+  opacity: 0;
+  pointer-events: none;
+}
+#dynamic-island.active {
+  opacity: 1;
+  width: 290px;
+  height: 60px;
+  border-radius: 30px;
+}
+.island-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.45s ease;
+  transition-delay: 0.15s;
+  color: #fff;
+  font-family: Inter, sans-serif;
+}
+#dynamic-island.active .island-content {
+  opacity: 1;
+  transform: scale(1);
+}
+.island-content .icon { font-size: 20px; text-shadow: 0 0 10px var(--gold); }
+.island-content .text { font-size: 14px; font-weight: 500; letter-spacing: 0.05em; }
+
+/* Parallax Tilt Elements */
+.hero-center {
+  transform: translate(var(--tilt-x, 0), var(--tilt-y, 0));
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
+}
+.floating-tooth .tooth {
+  transform: translate(calc(var(--tilt-x, 0) * -1.5), calc(var(--tilt-y, 0) * -1.5));
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
+}
+
 body:after {
   content: "";
   position: fixed;
@@ -1088,9 +1144,11 @@ section .chapter {
   margin: 0 auto;
   background: linear-gradient(
     142deg,
-    rgba(229, 226, 213, 0.07),
-    rgba(255, 255, 255, 0.03)
+    rgba(229, 226, 213, 0.08),
+    rgba(255, 255, 255, 0.02)
   );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.23);
   padding: 40px 60px 60px;
   position: relative;
@@ -1209,7 +1267,10 @@ section .chapter {
   width: min(640px, calc(100vw - 40px));
   padding: 56px 40px;
   border: 1px solid var(--line);
-  background: radial-gradient(circle at center, #171b15, #090908);
+  background: rgba(15, 17, 15, 0.4);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
   text-align: center;
   position: relative;
 }

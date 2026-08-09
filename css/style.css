@@ -14,6 +14,7 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
   width: 100%;
+  scroll-snap-type: y proximity;
 }
 body {
   margin: 0;
@@ -935,6 +936,7 @@ section {
   padding: 105px 9vw;
   min-height: auto;
   border-bottom: 1px solid var(--line);
+  scroll-snap-align: start;
 }
 
 section .chapter {
@@ -1116,17 +1118,54 @@ section .chapter {
   justify-items: center;
 }
 
-.age-word {
-  font-family: var(--serif);
-  font-size: clamp(65px, 16vw, 270px);
-  line-height: 0.85;
-  letter-spacing: -0.05em;
-  color: var(--paper);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+.marquee-wrapper {
+  width: 100vw;
+  margin-left: -9vw;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
 }
 
-.age-word i {
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 15vw;
+  z-index: 2;
+  pointer-events: none;
+}
+.marquee-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg), transparent);
+}
+.marquee-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg), transparent);
+}
+
+.marquee {
+  display: inline-block;
+  animation: scroll-marquee 20s linear infinite;
+}
+
+@keyframes scroll-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee span {
+  font-family: var(--serif);
+  font-size: clamp(65px, 15vw, 270px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--paper);
+  padding-right: 40px;
+  display: inline-block;
+}
+
+.marquee span i {
   font-style: italic;
   color: var(--gold2);
 }
@@ -1154,11 +1193,59 @@ section .chapter {
 
 .letter {
   min-height: 620px;
+  perspective: 1500px;
 }
 
-.envelope {
+.flip-container {
+  width: 100%;
   max-width: 860px;
   margin: 0 auto;
+  cursor: pointer;
+  perspective: 1500px;
+}
+
+.flipper {
+  width: 100%;
+  position: relative;
+  transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-container.flipped .flipper {
+  transform: rotateY(180deg);
+}
+
+.front, .back {
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  position: relative;
+}
+
+.back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+}
+
+.tap-hint {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold2);
+  animation: pulse-hint 2s infinite;
+}
+
+@keyframes pulse-hint {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.envelope, .letter-content {
   background: linear-gradient(
     142deg,
     rgba(229, 226, 213, 0.08),
@@ -1168,7 +1255,7 @@ section .chapter {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.23);
   padding: 40px 60px 60px;
-  position: relative;
+  border-radius: 4px;
 }
 
 .envelope .flap {
@@ -1349,31 +1436,37 @@ section .chapter {
   }
 
   .gallery-frame {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding-block: 20px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 20px;
+    padding: 30px 10vw;
+    margin-left: -8vw;
+    width: 100vw;
+    scrollbar-width: none;
+  }
+  
+  .gallery-frame::-webkit-scrollbar {
+    display: none;
   }
 
   .gallery-card {
+    flex: 0 0 75%;
+    scroll-snap-align: center;
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 174, 98, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 174, 98, 0.15);
   }
 
   .gallery-card,
   .gallery-card img {
-    min-height: 320px;
+    min-height: 380px;
   }
 
-  .gallery-card.photo-one {
-    transform: rotate(-2deg);
-  }
-
-  .gallery-card.photo-two {
-    transform: rotate(3deg) translateY(-15px);
-  }
-
+  .gallery-card.photo-one,
+  .gallery-card.photo-two,
   .gallery-card.photo-three {
-    transform: rotate(-1.5deg) translateY(-30px);
+    transform: none; /* Reset rotation for horizontal scroll */
   }
 
   .envelope {

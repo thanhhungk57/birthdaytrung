@@ -92,7 +92,13 @@
 
       <section class="age">
         <div class="chapter">CHAPTER 03</div>
-        <div class="age-word">TWENTY<br /><i>FOUR</i></div>
+        <div class="marquee-wrapper">
+          <div class="marquee">
+            <span>TWENTY <i>FOUR</i></span>
+            <span>TWENTY <i>FOUR</i></span>
+            <span>TWENTY <i>FOUR</i></span>
+          </div>
+        </div>
         <div class="age-orbit">
           <span>GROW</span><span>CREATE</span><span>LIVE</span
           ><span>SMILE</span>
@@ -105,27 +111,34 @@
 
       <section class="letter">
         <div class="chapter">CHAPTER 04</div>
-        <div class="envelope" id="envelope">
-          <div class="flap"></div>
-          <div class="seal">24</div>
-          <div class="letter-content">
-            <small>PRIVATE LETTER / FOR EM TRUNG</small>
-            <h2>Gửi em,</h2>
-            <p>Chúc mừng sinh nhật tuổi 24.</p>
-            <p>
-              Tuổi 24 là ngày em bước vào một chương mới: sống chắc chắn hơn, đi
-              vững hơn, và luôn giữ trong mình sự nam tính, nhiệt huyết và một
-              trái tim tốt đẹp.
-            </p>
-            <p>
-              Chúc em luôn mạnh mẽ trong công việc, bình an trong cuộc sống, và
-              có thật nhiều niềm vui xứng đáng với những nỗ lực của mình.
-            </p>
-            <p class="gold">
-              Tuổi 24 — em hãy chọn cho mình một đường đi đẹp và một đời sống
-              rất đáng sống.
-            </p>
-            <div class="signature">Your cousin ✦</div>
+        <div class="flip-container" id="envelope" onclick="this.classList.toggle('flipped'); if(navigator.vibrate) navigator.vibrate(15);">
+          <div class="flipper">
+            <!-- Mặt trước (Bao thư) -->
+            <div class="front envelope">
+              <div class="flap"></div>
+              <div class="seal">24</div>
+              <div class="tap-hint">TAP TO OPEN ✦</div>
+            </div>
+            <!-- Mặt sau (Lá thư) -->
+            <div class="back letter-content">
+              <small>PRIVATE LETTER / FOR EM TRUNG</small>
+              <h2>Gửi em,</h2>
+              <p>Chúc mừng sinh nhật tuổi 24.</p>
+              <p>
+                Tuổi 24 là ngày em bước vào một chương mới: sống chắc chắn hơn, đi
+                vững hơn, và luôn giữ trong mình sự nam tính, nhiệt huyết và một
+                trái tim tốt đẹp.
+              </p>
+              <p>
+                Chúc em luôn mạnh mẽ trong công việc, bình an trong cuộc sống, và
+                có thật nhiều niềm vui xứng đáng với những nỗ lực của mình.
+              </p>
+              <p class="gold">
+                Tuổi 24 — em hãy chọn cho mình một đường đi đẹp và một đời sống
+                rất đáng sống.
+              </p>
+              <div class="signature">Your cousin ✦</div>
+            </div>
           </div>
         </div>
       </section>
